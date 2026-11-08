@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-wine: #7b1e3a;
+  --color-wine-dark: #5c142a;
+  --color-cream: #faf6f1;
+  --color-ink: #1f1a17;
+  --color-muted: #5a504a;
+  --color-line: #d9d0c7;
+}
+
+html {
+  /* 1rem = 17px at the browser default, while still honouring larger system fonts. */
+  font-size: 106.25%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
