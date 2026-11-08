@@ -1,10 +1,11 @@
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useState, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PhotoPicker from '../components/PhotoPicker';
 import StarRating from '../components/StarRating';
+import WineNotFound from '../components/WineNotFound';
 import { db } from '../db/db';
 import type { Wine, WineType } from '../db/types';
+import { useWine } from '../hooks/useWine';
 import { fi } from '../i18n/fi';
 import { countryNames, EMPTY_KNOWLEDGE, grapeNames, loadKnowledge } from '../lib/knowledge';
 import {
@@ -36,28 +37,15 @@ function Field({ label, error, children }: { label: string; error?: string; chil
 
 export default function AddEditWine() {
   const { id } = useParams();
-  const wineId = id === undefined ? undefined : Number(id);
-  const existing = useLiveQuery(
-    async () =>
-      wineId !== undefined && Number.isInteger(wineId)
-        ? ((await db.wines.get(wineId)) ?? null)
-        : null,
-    [wineId],
-  );
-
   if (id === undefined) return <WineForm key="new" />;
+  return <EditWine key={id} id={id} />;
+}
+
+function EditWine({ id }: { id: string }) {
+  const existing = useWine(id);
   if (existing === undefined) return <p className="text-muted">{fi.loading}</p>;
-  if (existing === null) {
-    return (
-      <>
-        <p>{fi.form.notFound}</p>
-        <Link to="/" className="mt-2 flex min-h-11 items-center font-semibold text-wine underline">
-          {fi.form.backHome}
-        </Link>
-      </>
-    );
-  }
-  return <WineForm key={id} existing={existing} />;
+  if (existing === null) return <WineNotFound />;
+  return <WineForm existing={existing} />;
 }
 
 function WineForm({ existing }: { existing?: Wine }) {
@@ -74,7 +62,6 @@ function WineForm({ existing }: { existing?: Wine }) {
   const [errors, setErrors] = useState<WineFormErrors>({});
   const [saving, setSaving] = useState(false);
   const [actionError, setActionError] = useState<string>();
-  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [knowledge, setKnowledge] = useState(EMPTY_KNOWLEDGE);
 
   useEffect(() => {
@@ -116,21 +103,16 @@ function WineForm({ existing }: { existing?: Wine }) {
     setSaving(true);
     try {
       const record = buildWineRecord(formToWineFields(values, now), photos, existing, now);
-      await (existing ? db.wines.put(record) : db.wines.add(record));
-      navigate('/');
+      if (existing) {
+        await db.wines.put(record);
+        navigate(`/wines/${existing.id}`, { replace: true });
+      } else {
+        await db.wines.add(record);
+        navigate('/');
+      }
     } catch {
       setActionError(fi.form.errors.saveFailed);
       setSaving(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    setActionError(undefined);
-    try {
-      await db.wines.delete(existing!.id!);
-      navigate('/');
-    } catch {
-      setActionError(fi.form.errors.deleteFailed);
     }
   };
 
@@ -345,36 +327,15 @@ function WineForm({ existing }: { existing?: Wine }) {
         {saving ? fi.form.saving : fi.form.save}
       </button>
 
-      {existing &&
-        (confirmingDelete ? (
-          <div role="alert" className="rounded-lg border border-danger p-3">
-            <p className="font-semibold">{fi.form.deleteConfirm}</p>
-            <div className="mt-2 flex gap-2">
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="min-h-12 flex-1 rounded-lg bg-danger px-2 font-bold text-white"
-              >
-                {fi.form.deleteYes}
-              </button>
-              <button
-                type="button"
-                onClick={() => setConfirmingDelete(false)}
-                className="min-h-12 flex-1 rounded-lg border border-muted bg-white px-2 font-semibold"
-              >
-                {fi.form.deleteNo}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setConfirmingDelete(true)}
-            className="min-h-12 rounded-lg border border-danger bg-white px-4 font-semibold text-danger"
-          >
-            {fi.form.delete}
-          </button>
-        ))}
+      {existing && (
+        <Link
+          to={`/wines/${existing.id}`}
+          replace
+          className="flex min-h-12 items-center justify-center rounded-lg border border-muted bg-white px-4 font-semibold"
+        >
+          {fi.form.cancel}
+        </Link>
+      )}
     </form>
   );
 }

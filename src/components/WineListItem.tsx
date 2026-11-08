@@ -9,7 +9,7 @@ export default function WineListItem({ wine }: { wine: Wine }) {
   return (
     <li>
       <Link
-        to={`/wines/${wine.id}/edit`}
+        to={`/wines/${wine.id}`}
         className="flex min-h-20 items-center gap-3 rounded-lg border border-line bg-white p-2"
       >
         {thumbUrl ? (

@@ -29,6 +29,74 @@ export const fi = {
   home: {
     empty: 'Et ole vielä lisännyt yhtään viiniä.',
     addFirst: 'Lisää ensimmäinen viini',
+    summaryTitle: 'Viinipäiväkirjasi',
+  },
+  filters: {
+    search: 'Hae viiniä',
+    searchPlaceholder: 'nimi, tuottaja, rypäle…',
+    show: 'Näytä suodattimet ja järjestys',
+    hide: 'Piilota suodattimet ja järjestys',
+    filterBy: 'Näytä vain',
+    sortBy: 'Järjestä',
+    topRated: '★4 tai parempi',
+    buyAgain: 'Ostaisin uudelleen',
+    sorts: { date: 'Uusin ensin', rating: 'Paras ensin', price: 'Halvin ensin' },
+    showing: (visible: number, total: number) => `Näytetään ${visible}/${total} viiniä`,
+    clear: 'Tyhjennä haku',
+    noResults: 'Hakuehdoilla ei löytynyt viinejä.',
+  },
+  card: {
+    price: 'Hinta',
+    yes: 'Kyllä',
+    no: 'Ei',
+    edit: 'Muokkaa',
+  },
+  wineNouns: {
+    red: 'punaviini',
+    white: 'valkoviini',
+    rose: 'roséviini',
+    sparkling: 'kuohuviini',
+    dessert: 'jälkiruokaviini',
+    other: 'viini',
+  } satisfies Record<WineType, string>,
+  // Keys are lower case. A country missing from this list is shown as written.
+  countryAdjectives: {
+    argentiina: 'argentiinalainen',
+    australia: 'australialainen',
+    bulgaria: 'bulgarialainen',
+    chile: 'chileläinen',
+    espanja: 'espanjalainen',
+    'etelä-afrikka': 'eteläafrikkalainen',
+    georgia: 'georgialainen',
+    italia: 'italialainen',
+    itävalta: 'itävaltalainen',
+    kreikka: 'kreikkalainen',
+    kroatia: 'kroatialainen',
+    libanon: 'libanonilainen',
+    portugali: 'portugalilainen',
+    ranska: 'ranskalainen',
+    romania: 'romanialainen',
+    saksa: 'saksalainen',
+    slovenia: 'slovenialainen',
+    suomi: 'suomalainen',
+    sveitsi: 'sveitsiläinen',
+    unkari: 'unkarilainen',
+    'uusi-seelanti': 'uusiseelantilainen',
+    usa: 'yhdysvaltalainen',
+    yhdysvallat: 'yhdysvaltalainen',
+  } as Record<string, string | undefined>,
+  summary: {
+    food: (food: string) => `Söit sen kanssa: ${food}.`,
+    thisMonth: (count: number) => {
+      if (count === 0) return 'Tässä kuussa et ole vielä maistanut yhtään viiniä.';
+      if (count === 1) return 'Tässä kuussa olet maistanut yhden viinin.';
+      return `Tässä kuussa olet maistanut ${count} viiniä.`;
+    },
+    topGrape: (grape: string, average: string, count: number) =>
+      `Paras rypäleesi on ${grape}: keskiarvo ★${average} (${count} viiniä).`,
+    bestValue: (name: string, rating: number, price: string) =>
+      `Paras vastine rahalle: ${name} (★${rating}, ${price}).`,
+    latestBuyAgain: (name: string) => `Viimeisin uudelleen ostettava: ${name}.`,
   },
   wineTypes: {
     red: 'Punainen',
@@ -68,6 +136,7 @@ export const fi = {
     deleteConfirm: 'Haluatko varmasti poistaa tämän viinin? Tätä ei voi perua.',
     deleteYes: 'Kyllä, poista',
     deleteNo: 'Peruuta',
+    cancel: 'Peruuta muutokset',
     notFound: 'Viiniä ei löytynyt.',
     backHome: 'Takaisin viineihin',
     errors: {
