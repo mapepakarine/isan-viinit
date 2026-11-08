@@ -11,7 +11,7 @@ interface Props {
 export default function StarRating({ value, onChange }: Props) {
   return (
     <div>
-      <div role="group" aria-label={fi.rating.label} className="flex gap-1">
+      <div role="group" aria-label={fi.rating.label} className="flex">
         {VALUES.map((star) => {
           const filled = value !== undefined && star <= value;
           return (
@@ -21,23 +21,25 @@ export default function StarRating({ value, onChange }: Props) {
               aria-label={fi.rating.star(star)}
               aria-pressed={value === star}
               onClick={() => onChange(star)}
-              className={`flex h-14 flex-1 items-center justify-center rounded-lg border text-3xl ${
-                filled ? 'border-wine bg-wine text-white' : 'border-line bg-white text-muted'
+              className={`flex h-14 flex-1 items-center justify-center text-[2.5rem] leading-none active:opacity-70 ${
+                filled ? 'text-wine' : 'text-star-empty'
               }`}
             >
-              {filled ? '★' : '☆'}
+              ★
             </button>
           );
         })}
       </div>
       {value !== undefined && (
-        <button
-          type="button"
-          onClick={() => onChange(undefined)}
-          className="mt-1 min-h-11 font-semibold text-wine underline"
-        >
-          {fi.rating.clear}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => onChange(undefined)}
+            className="min-h-11 px-1 text-muted underline"
+          >
+            {fi.rating.clear}
+          </button>
+        </div>
       )}
     </div>
   );

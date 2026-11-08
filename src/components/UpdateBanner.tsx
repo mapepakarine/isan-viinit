@@ -1,5 +1,6 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { fi } from '../i18n/fi';
+import { primaryButton, secondaryButton } from './buttonStyles';
 
 export default function UpdateBanner() {
   const {
@@ -10,22 +11,25 @@ export default function UpdateBanner() {
   if (!needRefresh) return null;
 
   return (
-    <div role="status" className="bg-wine-dark px-4 py-3 text-white">
+    <div
+      role="status"
+      className="fixed inset-x-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-20 mx-auto max-w-[406px] rounded-2xl border border-line bg-white p-4 shadow-lg"
+    >
       <p className="font-semibold">{fi.update.message}</p>
-      <div className="mt-2 flex gap-2">
-        <button
-          type="button"
-          onClick={() => updateServiceWorker(true)}
-          className="min-h-11 flex-1 rounded-lg bg-white px-4 font-bold text-wine-dark"
-        >
-          {fi.update.action}
-        </button>
+      <div className="mt-3 flex gap-2">
         <button
           type="button"
           onClick={() => setNeedRefresh(false)}
-          className="min-h-11 flex-1 rounded-lg border border-white px-4 font-semibold"
+          className={`${secondaryButton} flex-1`}
         >
           {fi.update.dismiss}
+        </button>
+        <button
+          type="button"
+          onClick={() => updateServiceWorker(true)}
+          className={`${primaryButton} flex-1`}
+        >
+          {fi.update.action}
         </button>
       </div>
     </div>

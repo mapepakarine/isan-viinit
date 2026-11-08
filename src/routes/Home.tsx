@@ -1,13 +1,15 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import FilterChips from '../components/FilterChips';
+import { primaryButton } from '../components/buttonStyles';
+import FilterSheet from '../components/FilterSheet';
 import SummaryCard from '../components/SummaryCard';
 import WineListItem from '../components/WineListItem';
 import { db } from '../db/db';
 import { fi } from '../i18n/fi';
 import { journalSummary } from '../lib/summaries';
 import {
+  activeFilterCount,
   filterWines,
   hasActiveFilters,
   NO_FILTERS,
@@ -16,22 +18,35 @@ import {
   type WineSort,
 } from '../lib/wineList';
 
-// Kept outside the component so a search survives opening a wine and coming back.
-let remembered: { filters: WineFilters; sort: WineSort; showFilters: boolean } = {
+// Kept outside the component so a search and the scroll position survive opening a
+// wine and coming back, which saves scrolling the list again with one thumb.
+const remembered: { filters: WineFilters; sort: WineSort; scrollY: number } = {
   filters: NO_FILTERS,
   sort: 'date',
-  showFilters: false,
+  scrollY: 0,
 };
 
 export default function Home() {
   const wines = useLiveQuery(() => db.wines.toArray());
   const [filters, setFilters] = useState(remembered.filters);
   const [sort, setSort] = useState(remembered.sort);
-  const [showFilters, setShowFilters] = useState(remembered.showFilters);
+  const [showFilters, setShowFilters] = useState(false);
+  const loaded = wines !== undefined;
 
   useEffect(() => {
-    remembered = { filters, sort, showFilters };
-  }, [filters, sort, showFilters]);
+    remembered.filters = filters;
+    remembered.sort = sort;
+  }, [filters, sort]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    window.scrollTo(0, remembered.scrollY);
+    const onScroll = () => {
+      remembered.scrollY = window.scrollY;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [loaded]);
 
   const visible = useMemo(
     () => (wines ? sortWines(filterWines(wines, filters), sort) : []),
@@ -39,7 +54,7 @@ export default function Home() {
   );
   const summary = useMemo(() => journalSummary(wines ?? [], new Date()), [wines]);
 
-  const heading = <h1 className="text-3xl font-bold text-wine">{fi.titles.home}</h1>;
+  const heading = <h1 className="font-display text-3xl font-semibold">{fi.titles.home}</h1>;
 
   if (wines === undefined) {
     return (
@@ -55,76 +70,79 @@ export default function Home() {
       <>
         {heading}
         <p className="mt-3 text-muted">{fi.home.empty}</p>
-        <Link
-          to="/wines/new"
-          className="mt-4 flex min-h-14 items-center justify-center rounded-lg bg-wine px-4 font-bold text-white"
-        >
+        <Link to="/wines/new" className={`${primaryButton} mt-6`}>
           {fi.home.addFirst}
         </Link>
       </>
     );
   }
 
-  const filtering = hasActiveFilters(filters);
+  const filterCount = activeFilterCount(filters);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 pb-20">
       {heading}
       <SummaryCard lines={summary} />
-
-      <label className="block">
-        <span className="font-semibold">{fi.filters.search}</span>
-        <input
-          type="search"
-          name="search"
-          placeholder={fi.filters.searchPlaceholder}
-          value={filters.query}
-          onChange={(e) => setFilters({ ...filters, query: e.target.value })}
-          className="mt-1 block min-h-12 w-full min-w-0 appearance-none rounded-lg border border-muted bg-white px-3 py-2 text-ink placeholder:text-muted"
-        />
-      </label>
-
-      <button
-        type="button"
-        aria-expanded={showFilters}
-        onClick={() => setShowFilters(!showFilters)}
-        className="min-h-12 rounded-lg border border-wine px-4 font-semibold text-wine"
-      >
-        {showFilters ? fi.filters.hide : fi.filters.show}
-      </button>
-
-      {showFilters && (
-        <FilterChips
-          filters={filters}
-          sort={sort}
-          onFiltersChange={setFilters}
-          onSortChange={setSort}
-        />
-      )}
-
-      {filtering && (
-        <div className="flex items-center justify-between gap-2">
-          <p role="status" className="font-semibold">
-            {fi.filters.showing(visible.length, wines.length)}
-          </p>
-          <button
-            type="button"
-            onClick={() => setFilters(NO_FILTERS)}
-            className="min-h-11 shrink-0 font-semibold text-wine underline"
-          >
-            {fi.filters.clear}
-          </button>
-        </div>
-      )}
 
       {visible.length === 0 ? (
         <p className="text-muted">{fi.filters.noResults}</p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul>
           {visible.map((wine) => (
             <WineListItem key={wine.id} wine={wine} />
           ))}
         </ul>
+      )}
+
+      {/* Search lives above the bottom menu, within reach of the thumb at any scroll position. */}
+      <div className="fixed inset-x-0 bottom-[calc(4rem+1px+max(0.5rem,env(safe-area-inset-bottom)))] z-10 mx-auto max-w-[430px] bg-cream px-3 pt-2 pb-1">
+        {hasActiveFilters(filters) && (
+          <div className="flex items-center justify-between gap-2 px-1 pb-1">
+            <p role="status" className="text-muted">
+              {fi.filters.showing(visible.length, wines.length)}
+            </p>
+            <button
+              type="button"
+              onClick={() => setFilters(NO_FILTERS)}
+              className="min-h-11 shrink-0 font-semibold text-wine underline"
+            >
+              {fi.filters.clear}
+            </button>
+          </div>
+        )}
+        <div className="flex items-center gap-2">
+          <input
+            type="search"
+            name="search"
+            aria-label={fi.filters.search}
+            placeholder={fi.filters.searchPlaceholder}
+            value={filters.query}
+            onChange={(e) => setFilters({ ...filters, query: e.target.value })}
+            className="block min-h-12 w-full min-w-0 flex-1 appearance-none rounded-full border border-line bg-white px-4 text-ink placeholder:text-muted"
+          />
+          <button
+            type="button"
+            onClick={() => setShowFilters(true)}
+            className={`flex min-h-12 shrink-0 items-center gap-2 rounded-full border px-4 font-semibold active:opacity-80 ${
+              filterCount > 0 ? 'border-wine bg-wine text-white' : 'border-line bg-white text-ink'
+            }`}
+          >
+            {fi.filters.open}
+            {filterCount > 0 && <span>({filterCount})</span>}
+          </button>
+        </div>
+      </div>
+
+      {showFilters && (
+        <FilterSheet
+          filters={filters}
+          sort={sort}
+          resultCount={visible.length}
+          onFiltersChange={setFilters}
+          onSortChange={setSort}
+          onClearFilters={() => setFilters({ ...NO_FILTERS, query: filters.query })}
+          onClose={() => setShowFilters(false)}
+        />
       )}
     </div>
   );

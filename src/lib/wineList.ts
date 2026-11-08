@@ -62,3 +62,8 @@ export function sortWines(wines: Wine[], sort: WineSort): Wine[] {
   }[sort];
   return [...wines].sort(compare);
 }
+
+/** How many filters are chosen in the filter sheet; the search box is shown separately. */
+export function activeFilterCount(filters: WineFilters): number {
+  return filters.types.length + Number(filters.topRated) + Number(filters.buyAgain);
+}

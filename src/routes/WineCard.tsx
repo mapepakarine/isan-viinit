@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import BottomBar from '../components/BottomBar';
+import { primaryButton, secondaryButton } from '../components/buttonStyles';
 import WineNotFound from '../components/WineNotFound';
 import { db } from '../db/db';
 import type { Wine } from '../db/types';
@@ -52,54 +54,42 @@ function Card({ wine }: { wine: Wine }) {
 
   return (
     <article className="flex flex-col gap-4">
-      <Link to="/" className="flex min-h-11 items-center font-semibold text-wine underline">
-        <span aria-hidden="true">‹&nbsp;</span>
-        {fi.form.backHome}
-      </Link>
-
       {photoUrl && (
         <img
           src={photoUrl}
           alt={fi.photo.alt}
-          className="max-h-[28rem] w-full rounded-lg bg-white object-contain"
+          className="max-h-[26rem] w-full rounded-2xl bg-white object-contain"
         />
       )}
 
       <div>
-        <h1 className="text-3xl font-bold break-words text-wine">{wine.name}</h1>
+        <h1 className="font-display text-3xl font-semibold break-words">{wine.name}</h1>
         {wine.rating !== undefined && (
           <p className="mt-1 text-2xl text-wine" aria-label={fi.rating.star(wine.rating)}>
             {'★'.repeat(wine.rating)}
-            {'☆'.repeat(MAX_RATING - wine.rating)}
+            <span className="text-star-empty">{'★'.repeat(MAX_RATING - wine.rating)}</span>
           </p>
         )}
-        <p className="mt-2 text-lg">{wineSummary(wine)}</p>
+        <p className="mt-2 text-muted">{wineSummary(wine)}</p>
       </div>
 
-      <dl className="divide-y divide-line rounded-lg border border-line bg-white px-3">
+      <dl className="divide-y divide-line border-y border-line">
         {rows
           .filter(([, value]) => value !== undefined && value !== '')
           .map(([label, value]) => (
             <div key={label} className="flex justify-between gap-4 py-3">
-              <dt className="font-semibold">{label}</dt>
-              <dd className="min-w-0 text-right break-words">{value}</dd>
+              <dt className="text-muted">{label}</dt>
+              <dd className="min-w-0 text-right font-medium break-words">{value}</dd>
             </div>
           ))}
       </dl>
 
       {wine.notes && (
         <section>
-          <h2 className="font-semibold">{fi.form.notes}</h2>
+          <h2 className="text-muted">{fi.form.notes}</h2>
           <p className="mt-1 break-words whitespace-pre-wrap">{wine.notes}</p>
         </section>
       )}
-
-      <Link
-        to={`/wines/${wine.id}/edit`}
-        className="flex min-h-14 items-center justify-center rounded-lg bg-wine px-4 text-lg font-bold text-white"
-      >
-        {fi.card.edit}
-      </Link>
 
       {deleteFailed && (
         <p role="alert" className="font-semibold text-danger">
@@ -108,34 +98,46 @@ function Card({ wine }: { wine: Wine }) {
       )}
 
       {confirmingDelete ? (
-        <div role="alert" className="rounded-lg border border-danger p-3">
+        <div role="alert" className="rounded-2xl border border-danger p-3">
           <p className="font-semibold">{fi.form.deleteConfirm}</p>
-          <div className="mt-2 flex gap-2">
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="min-h-12 flex-1 rounded-lg bg-danger px-2 font-bold text-white"
-            >
-              {fi.form.deleteYes}
-            </button>
+          <div className="mt-3 flex gap-2">
             <button
               type="button"
               onClick={() => setConfirmingDelete(false)}
-              className="min-h-12 flex-1 rounded-lg border border-muted bg-white px-2 font-semibold"
+              className={`${secondaryButton} flex-1`}
             >
               {fi.form.deleteNo}
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className={`${primaryButton} flex-1 !bg-danger`}
+            >
+              {fi.form.deleteYes}
             </button>
           </div>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => setConfirmingDelete(true)}
-          className="min-h-12 rounded-lg border border-danger bg-white px-4 font-semibold text-danger"
-        >
-          {fi.form.delete}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => setConfirmingDelete(true)}
+            className="min-h-11 px-1 text-danger underline"
+          >
+            {fi.form.delete}
+          </button>
+        </div>
       )}
+
+      <BottomBar>
+        <Link to="/" className={`${secondaryButton} flex-1`}>
+          <span aria-hidden="true">‹</span>
+          {fi.card.back}
+        </Link>
+        <Link to={`/wines/${wine.id}/edit`} className={`${primaryButton} flex-[1.4]`}>
+          {fi.card.edit}
+        </Link>
+      </BottomBar>
     </article>
   );
 }

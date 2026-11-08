@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { Wine } from '../db/types';
-import { filterWines, hasActiveFilters, NO_FILTERS, sortWines } from './wineList';
+import {
+  activeFilterCount,
+  filterWines,
+  hasActiveFilters,
+  NO_FILTERS,
+  sortWines,
+} from './wineList';
 
 function wine(overrides: Partial<Wine>): Wine {
   return {
@@ -102,5 +108,15 @@ describe('sortWines', () => {
     const before = names(wines);
     sortWines(wines, 'price');
     expect(names(wines)).toEqual(before);
+  });
+});
+
+describe('activeFilterCount', () => {
+  it('counts each chosen filter but not the search text', () => {
+    expect(activeFilterCount(NO_FILTERS)).toBe(0);
+    expect(activeFilterCount({ ...NO_FILTERS, query: 'malbec' })).toBe(0);
+    expect(
+      activeFilterCount({ ...NO_FILTERS, types: ['red', 'white'], topRated: true, buyAgain: true }),
+    ).toBe(4);
   });
 });

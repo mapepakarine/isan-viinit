@@ -17,9 +17,9 @@ export default function Settings() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-wine">{fi.titles.settings}</h1>
-      <h2 className="mt-4 text-xl font-bold">{fi.settings.storageTitle}</h2>
-      <p className="mt-1">{status ? messages[status] : fi.settings.storageChecking}</p>
+      <h1 className="font-display text-3xl font-semibold">{fi.titles.settings}</h1>
+      <h2 className="mt-5 font-semibold">{fi.settings.storageTitle}</h2>
+      <p className="mt-1 text-muted">{status ? messages[status] : fi.settings.storageChecking}</p>
     </>
   );
 }

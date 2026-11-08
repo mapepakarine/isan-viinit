@@ -20,8 +20,8 @@ function Chip({
       type="button"
       aria-pressed={selected}
       onClick={onClick}
-      className={`min-h-11 rounded-full border px-4 font-semibold ${
-        selected ? 'border-wine bg-wine text-white' : 'border-muted bg-white text-ink'
+      className={`min-h-11 rounded-full border px-4 active:opacity-80 ${
+        selected ? 'border-wine bg-wine font-semibold text-white' : 'border-line bg-white text-ink'
       }`}
     >
       {selected && <span aria-hidden="true">✓ </span>}

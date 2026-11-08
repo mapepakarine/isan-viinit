@@ -3,21 +3,41 @@
 @theme {
   --color-wine: #7b1e3a;
   --color-wine-dark: #5c142a;
-  --color-cream: #faf6f1;
-  --color-ink: #1f1a17;
-  --color-muted: #5a504a;
-  --color-line: #d9d0c7;
+  --color-wine-soft: #f3e9e6;
+  --color-cream: #fbf8f4;
+  --color-ink: #211a17;
+  --color-muted: #5f544d;
+  --color-line: #e5dcd2;
+  --color-star-empty: #9c8e80;
   --color-danger: #a50e1f;
+  --font-display: ui-serif, 'New York', Georgia, 'Noto Serif', serif;
 }
 
 html {
   /* 1rem = 17px at the browser default, while still honouring larger system fonts. */
   font-size: 106.25%;
   -webkit-text-size-adjust: 100%;
+  /* Keeps focused fields clear of the fixed bottom bar. */
+  scroll-padding-bottom: 7rem;
 }
 
 body {
   background-color: var(--color-cream);
   color: var(--color-ink);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a,
+button,
+label,
+summary {
+  /* Removes the delay and accidental zoom from a quick double tap. */
+  touch-action: manipulation;
+}
+
+button,
+summary,
+label:has(input[type='file']) {
+  cursor: pointer;
 }

@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react';
 import { useObjectUrl } from '../hooks/useObjectUrl';
 import { fi } from '../i18n/fi';
+import { CameraIcon, GalleryIcon } from './Icons';
 
 interface Props {
   photo?: Blob;
@@ -9,9 +10,6 @@ interface Props {
   onSelect: (file: File) => void;
   onRemove: () => void;
 }
-
-const button =
-  'flex min-h-12 flex-1 cursor-pointer items-center justify-center rounded-lg border border-wine px-3 text-center font-semibold text-wine focus-within:outline-2 has-[:disabled]:opacity-50';
 
 export default function PhotoPicker({ photo, busy, failed, onSelect, onRemove }: Props) {
   const previewUrl = useObjectUrl(photo);
@@ -23,13 +21,17 @@ export default function PhotoPicker({ photo, busy, failed, onSelect, onRemove }:
     if (file) onSelect(file);
   };
 
+  const tile = `flex items-center justify-center gap-2 rounded-2xl font-semibold active:opacity-80 has-[:disabled]:opacity-50 has-[:focus-visible]:outline-2 ${
+    previewUrl ? 'min-h-12' : 'min-h-20 flex-col'
+  }`;
+
   return (
     <section aria-label={fi.photo.title}>
       {previewUrl && (
         <img
           src={previewUrl}
           alt={fi.photo.alt}
-          className="mb-2 max-h-72 w-full rounded-lg bg-white object-contain"
+          className="mb-2 max-h-56 w-full rounded-2xl bg-white object-cover"
         />
       )}
       {busy && (
@@ -42,8 +44,21 @@ export default function PhotoPicker({ photo, busy, failed, onSelect, onRemove }:
           {fi.photo.failed}
         </p>
       )}
-      <div className="flex gap-2">
-        <label className={button}>
+      {/* The camera is the main choice, so it takes the wider, right-hand side. */}
+      <div className="grid grid-cols-[2fr_3fr] gap-2">
+        <label className={`${tile} border border-line bg-white text-ink`}>
+          <GalleryIcon />
+          {fi.photo.chooseFromGallery}
+          <input
+            type="file"
+            accept="image/*"
+            disabled={busy}
+            onChange={handleChange}
+            className="sr-only"
+          />
+        </label>
+        <label className={`${tile} bg-wine-soft text-wine-dark`}>
+          <CameraIcon />
           {photo ? fi.photo.change : fi.photo.takePhoto}
           <input
             type="file"
@@ -54,26 +69,18 @@ export default function PhotoPicker({ photo, busy, failed, onSelect, onRemove }:
             className="sr-only"
           />
         </label>
-        <label className={button}>
-          {fi.photo.chooseFromGallery}
-          <input
-            type="file"
-            accept="image/*"
-            disabled={busy}
-            onChange={handleChange}
-            className="sr-only"
-          />
-        </label>
       </div>
       {photo && (
-        <button
-          type="button"
-          onClick={onRemove}
-          disabled={busy}
-          className="mt-1 min-h-11 font-semibold text-wine underline"
-        >
-          {fi.photo.remove}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={onRemove}
+            disabled={busy}
+            className="min-h-11 px-1 text-muted underline"
+          >
+            {fi.photo.remove}
+          </button>
+        </div>
       )}
     </section>
   );
