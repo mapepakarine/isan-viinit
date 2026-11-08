@@ -18,6 +18,7 @@ export interface Wine {
   buyAgain: boolean;
   photo?: Blob; // max 1200 px long edge, JPEG
   thumb?: Blob; // 300 px, used in lists
+  sample?: boolean; // demo wine that Settings can remove in one tap
   tastedAt: string; // ISO date (YYYY-MM-DD)
   createdAt: string; // ISO datetime
   updatedAt: string;

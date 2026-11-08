@@ -1,12 +1,15 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { primaryButton } from '../components/buttonStyles';
 import FilterSheet from '../components/FilterSheet';
+import { ChevronIcon } from '../components/Icons';
 import SummaryCard from '../components/SummaryCard';
 import WineListItem from '../components/WineListItem';
 import { db } from '../db/db';
+import { getLastBackupAt } from '../db/operations';
 import { fi } from '../i18n/fi';
+import { backupReminderDue } from '../lib/backupReminder';
 import { journalSummary } from '../lib/summaries';
 import {
   activeFilterCount,
@@ -28,24 +31,26 @@ const remembered: { filters: WineFilters; sort: WineSort; scrollY: number } = {
 
 export default function Home() {
   const wines = useLiveQuery(() => db.wines.toArray());
+  const lastBackupAt = useLiveQuery(getLastBackupAt);
   const [filters, setFilters] = useState(remembered.filters);
   const [sort, setSort] = useState(remembered.sort);
   const [showFilters, setShowFilters] = useState(false);
-  const loaded = wines !== undefined;
+  // Waiting for both means the backup reminder can't push the list down after it has appeared.
+  const loaded = wines !== undefined && lastBackupAt !== undefined;
 
   useEffect(() => {
     remembered.filters = filters;
     remembered.sort = sort;
   }, [filters, sort]);
 
-  useEffect(() => {
+  // A layout effect's cleanup runs before the next screen replaces this one, so scrollY is
+  // still the position the user left the list at.
+  useLayoutEffect(() => {
     if (!loaded) return;
     window.scrollTo(0, remembered.scrollY);
-    const onScroll = () => {
+    return () => {
       remembered.scrollY = window.scrollY;
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
   }, [loaded]);
 
   const visible = useMemo(
@@ -56,7 +61,7 @@ export default function Home() {
 
   const heading = <h1 className="font-display text-3xl font-semibold">{fi.titles.home}</h1>;
 
-  if (wines === undefined) {
+  if (!loaded) {
     return (
       <>
         {heading}
@@ -83,6 +88,16 @@ export default function Home() {
     <div className="flex flex-col gap-3 pb-20">
       {heading}
       <SummaryCard lines={summary} />
+
+      {backupReminderDue(lastBackupAt, wines, new Date()) && (
+        <Link
+          to="/settings"
+          className="flex min-h-12 items-center justify-between gap-3 rounded-2xl bg-wine-soft px-4 py-2 text-wine-dark active:opacity-80"
+        >
+          {lastBackupAt ? fi.backup.reminder : fi.backup.reminderNever}
+          <ChevronIcon className="h-6 w-6 shrink-0 -rotate-90" />
+        </Link>
+      )}
 
       {visible.length === 0 ? (
         <p className="text-muted">{fi.filters.noResults}</p>

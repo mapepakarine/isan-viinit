@@ -1,7 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useMemo, type ReactNode } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { primaryButton } from '../components/buttonStyles';
+import Section from '../components/Section';
 import StatBars from '../components/StatBars';
 import { db } from '../db/db';
 import type { Wine } from '../db/types';
@@ -17,15 +18,6 @@ function Tile({ label, value }: { label: string; value: string }) {
       <dt className="text-muted">{label}</dt>
       <dd className="font-display text-[1.6rem] leading-tight font-semibold">{value}</dd>
     </div>
-  );
-}
-
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="border-t border-line pt-4">
-      <h2 className="mb-2 font-display text-xl font-semibold">{title}</h2>
-      {children}
-    </section>
   );
 }
 

@@ -1,5 +1,5 @@
 // All Finnish user-facing strings live here.
-import type { WineType } from '../db/types.ts';
+import type { Wine, WineType } from '../db/types.ts';
 
 export const fi = {
   appName: 'Isän viinit',
@@ -181,5 +181,157 @@ export const fi = {
     storageDenied:
       'Selain ei ole luvannut säilyttää tietoja pysyvästi. Tiedot ovat puhelimessa, mutta muista varmuuskopiot.',
     storageUnsupported: 'Tämä selain ei kerro, säilyvätkö tiedot pysyvästi.',
+    privacy: 'Viinisi ja kuvasi ovat vain tässä puhelimessa. Niitä ei lähetetä minnekään.',
+    installTitle: 'Asennus',
+    installed: 'Sovellus on asennettu kotivalikkoon.',
+    notInstalled:
+      'Avaat sovellusta nyt selaimessa. Asenna se kotivalikkoon ja käytä aina kuvakkeesta, jotta viinit pysyvät tallessa.',
+    installLink: 'Näytä asennusohjeet',
+    samplesTitle: 'Esimerkkiviinit',
+    samplesExplain: 'Lisää muutama esimerkkiviini, jos haluat kokeilla sovellusta.',
+    samplesAdded: (count: number) =>
+      count === 1 ? 'Mukana on 1 esimerkkiviini.' : `Mukana on ${count} esimerkkiviiniä.`,
+    samplesAdd: 'Lisää esimerkkiviinit',
+    samplesRemove: 'Poista esimerkkiviinit',
   },
+  backup: {
+    title: 'Varmuuskopio',
+    explain: 'Tallenna varmuuskopio silloin tällöin puhelimen ulkopuolelle, esimerkiksi sähköpostiin. Sen avulla viinit saa palautettua myös uuteen puhelimeen.',
+    never: 'Varmuuskopiota ei ole vielä tehty.',
+    last: (date: string) => `Viimeisin varmuuskopio: ${date}`,
+    create: 'Tee varmuuskopio',
+    working: 'Odota hetki…',
+    saveReady: 'Varmuuskopio on valmis – tallenna se',
+    restore: 'Palauta',
+    shared: 'Varmuuskopio on tehty.',
+    downloaded: 'Varmuuskopio on tallennettu puhelimen latauksiin.',
+    exportFailed: 'Varmuuskopion teko ei onnistunut. Yritä uudelleen.',
+    notBackup: 'Tämä tiedosto ei ole Isän viinien varmuuskopio. Viineihisi ei koskettu.',
+    tooNew: 'Varmuuskopio on tehty uudemmalla versiolla. Päivitä sovellus ja yritä uudelleen.',
+    importFailed: 'Palautus ei onnistunut. Viinisi ovat ennallaan.',
+    restoreTitle: 'Palauta varmuuskopio',
+    contents: (wines: number, photos: number) =>
+      `Varmuuskopiossa on ${wines === 1 ? '1 viini' : `${wines} viiniä`} ja ${
+        photos === 1 ? '1 kuva' : `${photos} kuvaa`
+      }.`,
+    madeOn: (date: string) => `Tehty ${date}`,
+    mergeExplain: (count: number) =>
+      `Puhelimessa on nyt ${count === 1 ? '1 viini' : `${count} viiniä`}. Yhdistäminen säilyttää ne ja lisää varmuuskopion viinit.`,
+    merge: 'Yhdistä',
+    restoreAction: 'Palauta',
+    replace: 'Korvaa kaikki viinit',
+    replaceYes: 'Kyllä, korvaa',
+    replaceWarning: (current: number, incoming: number) =>
+      `Tämä poistaa puhelimesta ${current === 1 ? '1 viinin' : `${current} viiniä`} ja korvaa ne varmuuskopion ${
+        incoming === 1 ? '1 viinillä' : `${incoming} viinillä`
+      }. Tätä ei voi perua.`,
+    merged: (added: number, updated: number) =>
+      `Valmis. Lisätty ${added}, päivitetty ${updated}.`,
+    replaced: (count: number) => `Valmis. Palautettu ${count === 1 ? '1 viini' : `${count} viiniä`}.`,
+    reminder: 'Edellisestä varmuuskopiosta on yli kuukausi. Tee uusi asetuksissa.',
+    reminderNever: 'Et ole vielä tehnyt varmuuskopiota. Tee se asetuksissa.',
+    fileName: (date: string) => `isan-viinit-varmuuskopio-${date}.zip`,
+  },
+  install: {
+    title: 'Asennusohjeet',
+    intro: 'Kun sovellus on kotivalikossa, se aukeaa kuvakkeesta ja toimii ilman nettiä.',
+    iphoneTitle: 'iPhone',
+    iphoneSteps: [
+      'Avaa sovelluksen osoite Safarilla.',
+      'Napauta Jaa-painiketta.',
+      'Valitse Lisää Koti-valikkoon.',
+      'Napauta Lisää.',
+    ],
+    iphoneNote:
+      'Käytä sovellusta aina kotivalikon kuvakkeesta. Safarissa avatussa sivussa viinit eivät näy, koska iPhone säilyttää ne erikseen.',
+    androidTitle: 'Android',
+    androidSteps: [
+      'Avaa sovelluksen osoite Chromella.',
+      'Napauta ⋮-valikkoa oikeassa yläkulmassa.',
+      'Valitse Asenna sovellus tai Lisää aloitusnäytölle.',
+      'Vahvista napauttamalla Asenna.',
+    ],
+  },
+  samples: [
+    {
+      name: 'Andien Malbec',
+      producer: 'Esimerkkitila',
+      type: 'red',
+      grape: 'Malbec',
+      country: 'Argentiina',
+      region: 'Mendoza',
+      vintage: 2021,
+      price: 14.9,
+      store: 'Alko',
+      rating: 5,
+      notes: 'Tumma, pehmeä ja runsaan hedelmäinen.',
+      food: 'grillattu pihvi',
+      buyAgain: true,
+      daysAgo: 2,
+    },
+    {
+      name: 'Maipon Cabernet',
+      type: 'red',
+      grape: 'Cabernet Sauvignon',
+      country: 'Chile',
+      region: 'Maipo',
+      vintage: 2020,
+      price: 11.5,
+      store: 'Alko',
+      rating: 4,
+      food: 'lammas',
+      buyAgain: false,
+      daysAgo: 12,
+    },
+    {
+      name: 'Moselin Riesling',
+      type: 'white',
+      grape: 'Riesling',
+      country: 'Saksa',
+      vintage: 2022,
+      price: 13.2,
+      store: 'Alko',
+      rating: 4,
+      notes: 'Raikas ja sitruksinen.',
+      food: 'lohi',
+      buyAgain: true,
+      daysAgo: 25,
+    },
+    {
+      name: 'Burgundin Chardonnay',
+      type: 'white',
+      grape: 'Chardonnay',
+      country: 'Ranska',
+      vintage: 2021,
+      price: 24.9,
+      rating: 3,
+      buyAgain: false,
+      daysAgo: 48,
+    },
+    {
+      name: 'Toscanan punainen',
+      type: 'red',
+      grape: 'Sangiovese',
+      country: 'Italia',
+      region: 'Toscana',
+      price: 16.5,
+      store: 'Alko',
+      rating: 5,
+      food: 'pasta',
+      buyAgain: true,
+      daysAgo: 70,
+    },
+    {
+      name: 'Riojan juhlakuohu',
+      type: 'sparkling',
+      country: 'Espanja',
+      price: 9.9,
+      rating: 2,
+      buyAgain: false,
+      daysAgo: 95,
+    },
+  ] as (Pick<Wine, 'name' | 'type' | 'buyAgain'> &
+    Partial<Pick<Wine, 'producer' | 'grape' | 'country' | 'region' | 'vintage' | 'price' | 'store' | 'rating' | 'notes' | 'food'>> & {
+      daysAgo: number;
+    })[],
 };

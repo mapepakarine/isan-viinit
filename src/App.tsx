@@ -8,6 +8,7 @@ import { fi } from './i18n/fi';
 import { requestPersistence } from './lib/storage';
 import AddEditWine from './routes/AddEditWine';
 import Home from './routes/Home';
+import InstallGuide from './routes/InstallGuide';
 import Settings from './routes/Settings';
 import WineCard from './routes/WineCard';
 
@@ -77,6 +78,7 @@ export default function App() {
             <Route path="/wines/:id/edit" element={<AddEditWine />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/settings/install" element={<InstallGuide />} />
           </Routes>
         </Suspense>
       </main>
