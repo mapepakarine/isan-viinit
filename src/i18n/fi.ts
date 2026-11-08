@@ -47,6 +47,17 @@ export const fi = {
     clear: 'Tyhjennä haku',
     noResults: 'Hakuehdoilla ei löytynyt viinejä.',
   },
+  stats: {
+    empty: 'Tilastot ilmestyvät tänne, kun olet lisännyt viinejä.',
+    total: 'Viinejä',
+    averageRating: 'Keskiarvo',
+    averagePrice: 'Keskihinta',
+    topWines: 'Parhaat viinit',
+    grapes: 'Rypäleet',
+    countries: 'Maat',
+    bestValue: 'Paras hinta-laatusuhde',
+    wineCount: (count: number) => (count === 1 ? '1 viini' : `${count} viiniä`),
+  },
   card: {
     price: 'Hinta',
     yes: 'Kyllä',

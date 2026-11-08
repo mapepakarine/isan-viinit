@@ -1,6 +1,7 @@
 import type { Wine } from '../db/types';
 import { fi } from '../i18n/fi';
 import { capitalize, formatDecimal, formatPrice } from './format';
+import { bestValueWines } from './stats';
 import { compareNewest } from './wineList';
 import { toLocalIsoDate } from './wineForm';
 
@@ -64,9 +65,7 @@ function topGrapeLine(wines: Wine[]): string | undefined {
 }
 
 function bestValueLine(wines: Wine[]): string | undefined {
-  const best = wines
-    .filter((wine) => wine.rating !== undefined && wine.price !== undefined && wine.price > 0)
-    .sort((a, b) => b.rating! / b.price! - a.rating! / a.price! || compareNewest(a, b))[0];
+  const best = bestValueWines(wines)[0];
   return best && fi.summary.bestValue(best.name, best.rating!, formatPrice(best.price!));
 }
 

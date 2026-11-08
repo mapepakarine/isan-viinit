@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useMemo, useState, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import BottomBar from '../components/BottomBar';
 import { primaryButton, secondaryButton } from '../components/buttonStyles';
 import { ChevronIcon } from '../components/Icons';
@@ -62,6 +62,7 @@ function hasDetails(values: WineFormValues): boolean {
 
 function WineForm({ existing }: { existing?: Wine }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [values, setValues] = useState<WineFormValues>(() =>
     existing ? wineToForm(existing) : emptyWineForm(new Date()),
   );
@@ -130,7 +131,7 @@ function WineForm({ existing }: { existing?: Wine }) {
       const record = buildWineRecord(formToWineFields(values, now), photos, existing, now);
       if (existing) {
         await db.wines.put(record);
-        navigate(`/wines/${existing.id}`, { replace: true });
+        navigate(`/wines/${existing.id}`, { replace: true, state: location.state });
       } else {
         await db.wines.add(record);
         navigate('/');
@@ -378,6 +379,7 @@ function WineForm({ existing }: { existing?: Wine }) {
         <Link
           to={existing ? `/wines/${existing.id}` : '/'}
           replace
+          state={location.state}
           className={`${secondaryButton} flex-1`}
         >
           {fi.form.cancel}

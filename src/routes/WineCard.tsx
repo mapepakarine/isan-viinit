@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import BottomBar from '../components/BottomBar';
 import { primaryButton, secondaryButton } from '../components/buttonStyles';
 import WineNotFound from '../components/WineNotFound';
@@ -24,6 +24,8 @@ export default function WineCard() {
 
 function Card({ wine }: { wine: Wine }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as { from?: string } | null)?.from ?? '/';
   const photoUrl = useObjectUrl(wine.photo);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleteFailed, setDeleteFailed] = useState(false);
@@ -32,7 +34,7 @@ function Card({ wine }: { wine: Wine }) {
     setDeleteFailed(false);
     try {
       await db.wines.delete(wine.id!);
-      navigate('/', { replace: true });
+      navigate(from, { replace: true });
     } catch {
       setDeleteFailed(true);
     }
@@ -130,11 +132,11 @@ function Card({ wine }: { wine: Wine }) {
       )}
 
       <BottomBar>
-        <Link to="/" className={`${secondaryButton} flex-1`}>
+        <Link to={from} className={`${secondaryButton} flex-1`}>
           <span aria-hidden="true">‹</span>
-          {fi.card.back}
+          {from === '/stats' ? fi.nav.stats : fi.card.back}
         </Link>
-        <Link to={`/wines/${wine.id}/edit`} className={`${primaryButton} flex-[1.4]`}>
+        <Link to={`/wines/${wine.id}/edit`} state={location.state} className={`${primaryButton} flex-[1.4]`}>
           {fi.card.edit}
         </Link>
       </BottomBar>
