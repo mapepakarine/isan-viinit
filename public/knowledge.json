@@ -1,0 +1,72 @@
+{
+  "grapes": {
+    "Cabernet Sauvignon": {
+      "color": "red",
+      "body": "täyteläinen",
+      "description": "Yksi maailman tunnetuimmista punaviinirypäleistä. Viinit ovat täyteläisiä ja tanniinisia, ja niissä maistuu usein mustaherukka. Rypäle sopii hyvin tammikypsytykseen.",
+      "aromas": ["mustaherukka", "setri", "paprika", "tumma suklaa"],
+      "foods": ["pihvi", "lammas", "riista", "kypsät juustot"],
+      "servingTemp": "16–18"
+    },
+    "Malbec": {
+      "color": "red",
+      "body": "täyteläinen",
+      "description": "Ranskasta kotoisin oleva rypäle, josta on tullut Argentiinan tunnetuin viinilajike. Viinit ovat tummia, pehmeitä ja runsaan hedelmäisiä.",
+      "aromas": ["karhunvatukka", "luumu", "orvokki", "kaakao"],
+      "foods": ["grillattu pihvi", "makkara", "pata", "kovat juustot"],
+      "servingTemp": "16–18"
+    },
+    "Pinot Noir": {
+      "aliases": ["Spätburgunder", "Pinot Nero"],
+      "color": "red",
+      "body": "kevyt",
+      "description": "Vaalea ja hienostunut punaviinirypäle, joka viihtyy viileässä ilmastossa. Viinit ovat raikkaan hapokkaita ja pehmeätanniinisia. Burgundin punaviinit tehdään tästä rypäleestä.",
+      "aromas": ["kirsikka", "vadelma", "mansikka", "metsänpohja"],
+      "foods": ["ankka", "kana", "lohi", "sienet"],
+      "servingTemp": "14–16"
+    },
+    "Chardonnay": {
+      "color": "white",
+      "body": "keskitäyteläinen",
+      "description": "Monipuolinen valkoviinirypäle, jota viljellään lähes kaikkialla. Viileiltä alueilta tulee raikkaita viinejä, lämpimiltä alueilta ja tammikypsytettynä täyteläisempiä ja voisempia.",
+      "aromas": ["keltainen omena", "sitrus", "persikka", "voi"],
+      "foods": ["kana", "kala kermakastikkeessa", "äyriäiset", "pehmeät juustot"],
+      "servingTemp": "10–12"
+    },
+    "Riesling": {
+      "color": "white",
+      "body": "kevyt",
+      "description": "Saksan tärkein rypäle, josta tehdään raikkaan hapokkaita viinejä kuivista makeisiin. Tuoksussa on usein sitrusta ja kukkia, ja parhaat viinit kehittyvät pullossa pitkään.",
+      "aromas": ["sitruuna", "vihreä omena", "persikka", "kukat"],
+      "foods": ["kala", "äyriäiset", "aasialainen ruoka", "sianliha"],
+      "servingTemp": "8–10"
+    }
+  },
+  "regions": {
+    "Mendoza": {
+      "country": "Argentiina",
+      "description": "Argentiinan tärkein viinialue Andien juurella. Korkealla sijaitsevat viinitarhat saavat paljon aurinkoa ja viileitä öitä, mikä tuo viineihin kypsää hedelmää ja raikkautta.",
+      "grapes": ["Malbec", "Cabernet Sauvignon", "Chardonnay"]
+    },
+    "Bordeaux": {
+      "country": "Ranska",
+      "description": "Lounais-Ranskan kuuluisa viinialue, joka tunnetaan etenkin sekoitetuista punaviineistään. Viinit ovat usein rakenteikkaita ja kestävät hyvin kypsytystä.",
+      "grapes": ["Cabernet Sauvignon", "Merlot", "Cabernet Franc"]
+    },
+    "Toscana": {
+      "country": "Italia",
+      "description": "Keski-Italian kukkuloiden viinialue, jonka tunnetuin viini on Chianti. Punaviinit ovat yleensä hapokkaita ja sopivat erityisen hyvin ruoan kanssa.",
+      "grapes": ["Sangiovese", "Cabernet Sauvignon", "Merlot"]
+    },
+    "Rioja": {
+      "country": "Espanja",
+      "description": "Pohjois-Espanjan tunnetuin viinialue. Punaviinejä kypsytetään usein tammessa, mikä tuo niihin vaniljaa ja mausteisuutta.",
+      "grapes": ["Tempranillo", "Garnacha", "Graciano"]
+    },
+    "Maipo": {
+      "country": "Chile",
+      "description": "Santiagon lähellä sijaitseva laakso, joka on Chilen tunnetuimpia punaviinialueita. Se on tunnettu etenkin hedelmäisistä Cabernet Sauvignon -viineistään.",
+      "grapes": ["Cabernet Sauvignon", "Merlot", "Carménère"]
+    }
+  }
+}

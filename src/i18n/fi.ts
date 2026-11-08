@@ -1,4 +1,6 @@
 // All Finnish user-facing strings live here.
+import type { WineType } from '../db/types.ts';
+
 export const fi = {
   appName: 'Isän viinit',
   appDescription: 'Oma viinipäiväkirja, joka toimii ilman nettiä.',
@@ -24,4 +26,75 @@ export const fi = {
     action: 'Päivitä',
     dismiss: 'Myöhemmin',
   },
-} as const;
+  home: {
+    empty: 'Et ole vielä lisännyt yhtään viiniä.',
+    addFirst: 'Lisää ensimmäinen viini',
+  },
+  wineTypes: {
+    red: 'Punainen',
+    white: 'Valkoinen',
+    rose: 'Rosé',
+    sparkling: 'Kuohuva',
+    dessert: 'Jälkiruoka',
+    other: 'Muu',
+  } satisfies Record<WineType, string>,
+  rating: {
+    label: 'Arvosana',
+    star: (count: number) => (count === 1 ? '1 tähti' : `${count} tähteä`),
+    clear: 'Poista arvosana',
+  },
+  form: {
+    name: 'Viinin nimi',
+    required: 'pakollinen',
+    producer: 'Tuottaja',
+    type: 'Viinityyppi',
+    grape: 'Rypäle',
+    country: 'Maa',
+    region: 'Alue',
+    vintage: 'Vuosikerta',
+    vintagePlaceholder: 'esim. 2021',
+    price: 'Hinta (€)',
+    pricePlaceholder: 'esim. 12,90',
+    store: 'Mistä ostettu',
+    storePlaceholder: 'esim. Alko',
+    notes: 'Muistiinpanot',
+    food: 'Ruoka',
+    foodPlaceholder: 'esim. pihvi',
+    buyAgain: 'Ostaisin uudelleen',
+    tastedAt: 'Maistettu',
+    save: 'Tallenna',
+    saving: 'Tallennetaan…',
+    delete: 'Poista viini',
+    deleteConfirm: 'Haluatko varmasti poistaa tämän viinin? Tätä ei voi perua.',
+    deleteYes: 'Kyllä, poista',
+    deleteNo: 'Peruuta',
+    notFound: 'Viiniä ei löytynyt.',
+    backHome: 'Takaisin viineihin',
+    errors: {
+      nameRequired: 'Kirjoita viinin nimi.',
+      vintageInvalid: 'Kirjoita vuosikerta neljällä numerolla, esim. 2021.',
+      priceInvalid: 'Kirjoita hinta numeroina, esim. 12,90.',
+      summary: 'Tarkista punaisella merkityt kohdat.',
+      saveFailed: 'Tallennus ei onnistunut. Yritä uudelleen.',
+      deleteFailed: 'Poisto ei onnistunut. Yritä uudelleen.',
+    },
+  },
+  photo: {
+    title: 'Kuva',
+    alt: 'Kuva viinistä',
+    takePhoto: 'Ota kuva',
+    chooseFromGallery: 'Valitse kuvista',
+    change: 'Ota uusi kuva',
+    remove: 'Poista kuva',
+    processing: 'Käsitellään kuvaa…',
+    failed: 'Kuvan käsittely ei onnistunut. Voit silti tallentaa viinin ilman kuvaa.',
+  },
+  settings: {
+    storageTitle: 'Tietojen säilyvyys',
+    storageChecking: 'Tarkistetaan…',
+    storageGranted: 'Puhelin säilyttää viinisi pysyvästi.',
+    storageDenied:
+      'Selain ei ole luvannut säilyttää tietoja pysyvästi. Tiedot ovat puhelimessa, mutta muista varmuuskopiot.',
+    storageUnsupported: 'Tämä selain ei kerro, säilyvätkö tiedot pysyvästi.',
+  },
+};

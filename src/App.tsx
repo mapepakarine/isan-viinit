@@ -1,7 +1,8 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import UpdateBanner from './components/UpdateBanner';
 import { fi } from './i18n/fi';
+import { requestPersistence } from './lib/storage';
 import AddEditWine from './routes/AddEditWine';
 import Home from './routes/Home';
 import Settings from './routes/Settings';
@@ -17,6 +18,10 @@ const navItems = [
 ];
 
 export default function App() {
+  useEffect(() => {
+    void requestPersistence();
+  }, []);
+
   return (
     <div className="mx-auto flex min-h-dvh max-w-[430px] flex-col pt-[env(safe-area-inset-top)]">
       <UpdateBanner />
